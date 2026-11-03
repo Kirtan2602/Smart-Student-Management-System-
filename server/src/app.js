@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import prisma from './config/db.js';
+import routes from './routes/index.js';
+import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -15,42 +16,16 @@ app.use(
 // Frontend mathi aavta JSON data ne vanchva mate
 app.use(express.json());
 
-// Test route 1: home
+// Home
 app.get('/', (req, res) => {
   res.send('Smart Student Management System API is running');
 });
 
-// Test route 2: health check
-app.get('/api/health', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Backend is working correctly',
-    timestamp: new Date().toISOString(),
-  });
-});
+// Badha API routes: /api/...
+app.use('/api', routes);
 
-// Test route 3: database check
-app.get('/api/db-health', async (req, res) => {
-  try {
-    const [users, departments, semesters, subjects] = await Promise.all([
-      prisma.user.count(),
-      prisma.department.count(),
-      prisma.semester.count(),
-      prisma.subject.count(),
-    ]);
-
-    res.json({
-      success: true,
-      message: 'Database connected successfully',
-      counts: { users, departments, semesters, subjects },
-    });
-  } catch (error) {
-    console.error('DB error:', error.message);
-    res.status(500).json({
-      success: false,
-      message: 'Database connection failed',
-    });
-  }
-});
+// Aa 2 hamesha SAUTHI LAST ma hova joie
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;

@@ -1,0 +1,43 @@
+import { Router } from 'express';
+import prisma from '../config/db.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import departmentRoutes from './department.routes.js';
+import semesterRoutes from './semester.routes.js';
+import subjectRoutes from './subject.routes.js';
+
+const router = Router();
+
+// Health check
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend is working correctly',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Database health check
+router.get(
+  '/db-health',
+  asyncHandler(async (req, res) => {
+    const [users, departments, semesters, subjects] = await Promise.all([
+      prisma.user.count(),
+      prisma.department.count(),
+      prisma.semester.count(),
+      prisma.subject.count(),
+    ]);
+
+    res.json({
+      success: true,
+      message: 'Database connected successfully',
+      counts: { users, departments, semesters, subjects },
+    });
+  })
+);
+
+// Module routes
+router.use('/departments', departmentRoutes);
+router.use('/semesters', semesterRoutes);
+router.use('/subjects', subjectRoutes);
+
+export default router;
