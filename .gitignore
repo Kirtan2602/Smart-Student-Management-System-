@@ -1,0 +1,34 @@
+
+# Node dependencies
+node_modules/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*
+!.env.example
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Python generated files
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Old Git history backup
+.git-old-backup/
+
+# Python cache
+.pytest_cache/

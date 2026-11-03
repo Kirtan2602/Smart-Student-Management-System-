@@ -1,0 +1,347 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===================== ENUMS =====================
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+}
+
+enum ExamType {
+  UNIT_TEST
+  MID_TERM
+  INTERNAL
+  PRACTICAL
+  FINAL
+}
+
+enum NotificationType {
+  LOW_ATTENDANCE
+  RESULT
+  GENERAL
+}
+
+// ===================== 1. USERS =====================
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         Role
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student       Student?
+  teacher       Teacher?
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+
+  @@map("users")
+}
+
+// ===================== 4. DEPARTMENTS =====================
+
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  students Student[]
+  teachers Teacher[]
+  subjects Subject[]
+
+  @@map("departments")
+}
+
+// ===================== 5. SEMESTERS =====================
+
+model Semester {
+  id        Int      @id @default(autoincrement())
+  number    Int      @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  students Student[]
+  subjects Subject[]
+
+  @@map("semesters")
+}
+
+// ===================== 6. ACADEMIC YEARS =====================
+
+model AcademicYear {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  students           Student[]
+  studentSubjects    StudentSubject[]
+  teacherSubjects    TeacherSubject[]
+  attendanceSessions AttendanceSession[]
+  exams              Exam[]
+
+  @@map("academic_years")
+}
+
+// ===================== 2. STUDENTS =====================
+
+model Student {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @unique
+  enrollmentNo   String    @unique
+  firstName      String
+  lastName       String
+  phone          String?
+  gender         Gender?
+  dateOfBirth    DateTime? @db.Date
+  address        String?
+  departmentId   Int
+  semesterId     Int
+  academicYearId Int
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department   Department   @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  semester     Semester     @relation(fields: [semesterId], references: [id], onDelete: Restrict)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  studentSubjects   StudentSubject[]
+  attendanceRecords AttendanceRecord[]
+  marks             Marks[]
+
+  @@index([departmentId, semesterId])
+  @@map("students")
+}
+
+// ===================== 3. TEACHERS =====================
+
+model Teacher {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  employeeCode String   @unique
+  firstName    String
+  lastName     String
+  phone        String?
+  designation  String?
+  departmentId Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  teacherSubjects    TeacherSubject[]
+  attendanceSessions AttendanceSession[]
+
+  @@index([departmentId])
+  @@map("teachers")
+}
+
+// ===================== 7. SUBJECTS =====================
+
+model Subject {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique
+  name         String
+  departmentId Int
+  semesterId   Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  semester   Semester   @relation(fields: [semesterId], references: [id], onDelete: Restrict)
+
+  studentSubjects    StudentSubject[]
+  teacherSubjects    TeacherSubject[]
+  attendanceSessions AttendanceSession[]
+  exams              Exam[]
+
+  @@index([departmentId, semesterId])
+  @@map("subjects")
+}
+
+// ===================== 8. STUDENT_SUBJECTS (enrollment) =====================
+
+model StudentSubject {
+  id             Int      @id @default(autoincrement())
+  studentId      Int
+  subjectId      Int
+  academicYearId Int
+  createdAt      DateTime @default(now())
+
+  student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, subjectId, academicYearId])
+  @@index([subjectId])
+  @@map("student_subjects")
+}
+
+// ===================== 9. TEACHER_SUBJECTS (assignment) =====================
+
+model TeacherSubject {
+  id             Int      @id @default(autoincrement())
+  teacherId      Int
+  subjectId      Int
+  academicYearId Int
+  createdAt      DateTime @default(now())
+
+  teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  @@unique([teacherId, subjectId, academicYearId])
+  @@index([subjectId])
+  @@map("teacher_subjects")
+}
+
+// ===================== 10. ATTENDANCE_SESSIONS =====================
+
+model AttendanceSession {
+  id             Int      @id @default(autoincrement())
+  subjectId      Int
+  teacherId      Int
+  academicYearId Int
+  date           DateTime @db.Date
+  lectureNo      Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Restrict)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  records AttendanceRecord[]
+
+  @@unique([subjectId, date, lectureNo])
+  @@index([date])
+  @@map("attendance_sessions")
+}
+
+// ===================== 11. ATTENDANCE_RECORDS =====================
+
+model AttendanceRecord {
+  id        Int              @id @default(autoincrement())
+  sessionId Int
+  studentId Int
+  status    AttendanceStatus
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@index([studentId])
+  @@map("attendance_records")
+}
+
+// ===================== 12. EXAMS =====================
+
+model Exam {
+  id             Int       @id @default(autoincrement())
+  name           String
+  type           ExamType
+  subjectId      Int
+  academicYearId Int
+  maxMarks       Int
+  passingMarks   Int
+  examDate       DateTime? @db.Date
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  marks Marks[]
+
+  @@index([subjectId])
+  @@map("exams")
+}
+
+// ===================== 13. MARKS =====================
+
+model Marks {
+  id             Int      @id @default(autoincrement())
+  examId         Int
+  studentId      Int
+  obtainedMarks  Decimal  @db.Decimal(5, 2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, studentId])
+  @@index([studentId])
+  @@map("marks")
+}
+
+// ===================== 14. NOTIFICATIONS =====================
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  type      NotificationType @default(GENERAL)
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+// ===================== 15. ACTIVITY_LOGS =====================
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  action    String
+  entity    String
+  entityId  Int?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
