@@ -7,6 +7,7 @@ import userRoutes from './user.routes.js';
 import departmentRoutes from './department.routes.js';
 import semesterRoutes from './semester.routes.js';
 import subjectRoutes from './subject.routes.js';
+import dashboardRoutes from './dashboard.routes.js';
 
 const router = Router();
 
@@ -46,5 +47,6 @@ router.use('/users', userRoutes);
 router.use('/departments', departmentRoutes);
 router.use('/semesters', semesterRoutes);
 router.use('/subjects', subjectRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 export default router;
