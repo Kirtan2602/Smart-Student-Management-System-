@@ -1,11 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import routes from './routes/index.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
-// CORS: fakt tamara frontend ne backend vapravani permission
+// CORS: fakt tamara frontend ne allow, cookies sathe (credentials)
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -13,8 +14,11 @@ app.use(
   })
 );
 
-// Frontend mathi aavta JSON data ne vanchva mate
-app.use(express.json());
+// JSON vanchva (nano limit: moti request nakami)
+app.use(express.json({ limit: '10kb' }));
+
+// Cookies vanchva (refresh token mate)
+app.use(cookieParser());
 
 // Home
 app.get('/', (req, res) => {
@@ -24,7 +28,7 @@ app.get('/', (req, res) => {
 // Badha API routes: /api/...
 app.use('/api', routes);
 
-// Aa 2 hamesha SAUTHI LAST ma hova joie
+// Aa 2 hamesha SAUTHI LAST ma
 app.use(notFound);
 app.use(errorHandler);
 

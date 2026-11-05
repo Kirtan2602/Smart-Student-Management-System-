@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import prisma from '../config/db.js';
 import asyncHandler from '../utils/asyncHandler.js';
+import { authenticate, authorize } from '../middleware/auth.js';
+import authRoutes from './auth.routes.js';
+import userRoutes from './user.routes.js';
 import departmentRoutes from './department.routes.js';
 import semesterRoutes from './semester.routes.js';
 import subjectRoutes from './subject.routes.js';
 
 const router = Router();
 
-// Health check
+// Public: koi pan check kari shake
 router.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -16,9 +19,11 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Database health check
+// Database counts: fakt ADMIN
 router.get(
   '/db-health',
+  authenticate,
+  authorize('ADMIN'),
   asyncHandler(async (req, res) => {
     const [users, departments, semesters, subjects] = await Promise.all([
       prisma.user.count(),
@@ -36,6 +41,8 @@ router.get(
 );
 
 // Module routes
+router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
 router.use('/departments', departmentRoutes);
 router.use('/semesters', semesterRoutes);
 router.use('/subjects', subjectRoutes);

@@ -55,6 +55,7 @@ model User {
   teacher       Teacher?
   notifications Notification[]
   activityLogs  ActivityLog[]
+  refreshTokens RefreshToken[]
 
   @@map("users")
 }
@@ -295,12 +296,12 @@ model Exam {
 // ===================== 13. MARKS =====================
 
 model Marks {
-  id             Int      @id @default(autoincrement())
-  examId         Int
-  studentId      Int
-  obtainedMarks  Decimal  @db.Decimal(5, 2)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  examId        Int
+  studentId     Int
+  obtainedMarks Decimal  @db.Decimal(5, 2)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -344,4 +345,20 @@ model ActivityLog {
   @@index([userId])
   @@index([createdAt])
   @@map("activity_logs")
+}
+
+// ===================== 16. REFRESH_TOKENS =====================
+
+model RefreshToken {
+  id        Int       @id @default(autoincrement())
+  tokenHash String    @unique
+  userId    Int
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
 }
