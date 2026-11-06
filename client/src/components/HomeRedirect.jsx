@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import Loader from './charts/Loader';
+import Loader from "./Loader";
 import { ROLE_HOME } from '../utils/roles';
 
 // "/" par aavo to login ke dashboard par moklo

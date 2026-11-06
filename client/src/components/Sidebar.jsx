@@ -23,7 +23,7 @@ export default function Sidebar({ role, open, onClose }) {
               <NavLink
                 key={item.label}
                 to={item.path}
-                end
+                end={item.end}
                 onClick={onClose}
                 className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
               >

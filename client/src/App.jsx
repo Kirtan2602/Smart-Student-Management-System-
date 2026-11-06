@@ -7,6 +7,16 @@ import AdminDashboard from './pages/AdminDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentDashboard from './pages/StudentDashboard';
 import NotFound from './pages/NotFound';
+import StudentList from './pages/admin/StudentList';
+import StudentForm from './pages/admin/StudentForm';
+import StudentProfile from './pages/admin/StudentProfile';
+import TeacherList from './pages/admin/TeacherList';
+import TeacherForm from './pages/admin/TeacherForm';
+import TeacherProfile from './pages/admin/TeacherProfile';
+import DepartmentManager from './pages/admin/DepartmentManager';
+import SemesterManager from './pages/admin/SemesterManager';
+import AcademicYearManager from './pages/admin/AcademicYearManager';
+import SubjectManager from './pages/admin/SubjectManager';
 
 export default function App() {
   return (
@@ -17,6 +27,21 @@ export default function App() {
       <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />
+
+          <Route path="/admin/students" element={<StudentList />} />
+          <Route path="/admin/students/new" element={<StudentForm />} />
+          <Route path="/admin/students/:id" element={<StudentProfile />} />
+          <Route path="/admin/students/:id/edit" element={<StudentForm />} />
+
+          <Route path="/admin/teachers" element={<TeacherList />} />
+          <Route path="/admin/teachers/new" element={<TeacherForm />} />
+          <Route path="/admin/teachers/:id" element={<TeacherProfile />} />
+          <Route path="/admin/teachers/:id/edit" element={<TeacherForm />} />
+
+          <Route path="/admin/departments" element={<DepartmentManager />} />
+          <Route path="/admin/semesters" element={<SemesterManager />} />
+          <Route path="/admin/academic-years" element={<AcademicYearManager />} />
+          <Route path="/admin/subjects" element={<SubjectManager />} />
         </Route>
       </Route>
 

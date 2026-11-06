@@ -6,12 +6,14 @@ import authRoutes from './auth.routes.js';
 import userRoutes from './user.routes.js';
 import departmentRoutes from './department.routes.js';
 import semesterRoutes from './semester.routes.js';
+import academicYearRoutes from './academicYear.routes.js';
 import subjectRoutes from './subject.routes.js';
+import studentRoutes from './student.routes.js';
+import teacherRoutes from './teacher.routes.js';
 import dashboardRoutes from './dashboard.routes.js';
 
 const router = Router();
 
-// Public: koi pan check kari shake
 router.get('/health', (req, res) => {
   res.json({
     success: true,
@@ -20,7 +22,6 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Database counts: fakt ADMIN
 router.get(
   '/db-health',
   authenticate,
@@ -41,12 +42,14 @@ router.get(
   })
 );
 
-// Module routes
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/departments', departmentRoutes);
 router.use('/semesters', semesterRoutes);
+router.use('/academic-years', academicYearRoutes);
 router.use('/subjects', subjectRoutes);
+router.use('/students', studentRoutes);
+router.use('/teachers', teacherRoutes);
 router.use('/dashboard', dashboardRoutes);
 
 export default router;
