@@ -16,3 +16,6 @@ export const getDisplayName = (user) => {
   if (profile) return `${profile.firstName} ${profile.lastName}`;
   return user?.email || '';
 };
+
+// Aaj ni tarikh "YYYY-MM-DD" (date input mate, local timezone ma)
+export const todayInput = () => new Date().toLocaleDateString('en-CA');

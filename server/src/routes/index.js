@@ -11,6 +11,7 @@ import subjectRoutes from './subject.routes.js';
 import studentRoutes from './student.routes.js';
 import teacherRoutes from './teacher.routes.js';
 import dashboardRoutes from './dashboard.routes.js';
+import attendanceRoutes from './attendance.routes.js';
 
 const router = Router();
 
@@ -51,5 +52,6 @@ router.use('/subjects', subjectRoutes);
 router.use('/students', studentRoutes);
 router.use('/teachers', teacherRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/attendance', attendanceRoutes);
 
 export default router;

@@ -17,6 +17,10 @@ import DepartmentManager from './pages/admin/DepartmentManager';
 import SemesterManager from './pages/admin/SemesterManager';
 import AcademicYearManager from './pages/admin/AcademicYearManager';
 import SubjectManager from './pages/admin/SubjectManager';
+import MarkAttendance from './pages/attendance/MarkAttendance';
+import AttendanceHistory from './pages/attendance/AttendanceHistory';
+import AttendanceReport from './pages/attendance/AttendanceReport';
+import MyAttendance from './pages/student/MyAttendance';
 
 export default function App() {
   return (
@@ -42,18 +46,27 @@ export default function App() {
           <Route path="/admin/semesters" element={<SemesterManager />} />
           <Route path="/admin/academic-years" element={<AcademicYearManager />} />
           <Route path="/admin/subjects" element={<SubjectManager />} />
+
+          <Route path="/admin/attendance/mark" element={<MarkAttendance />} />
+          <Route path="/admin/attendance/history" element={<AttendanceHistory />} />
+          <Route path="/admin/attendance/report" element={<AttendanceReport />} />
         </Route>
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['TEACHER']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/teacher" element={<TeacherDashboard />} />
+
+          <Route path="/teacher/attendance/mark" element={<MarkAttendance />} />
+          <Route path="/teacher/attendance/history" element={<AttendanceHistory />} />
+          <Route path="/teacher/attendance/report" element={<AttendanceReport />} />
         </Route>
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={['STUDENT']} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/student" element={<StudentDashboard />} />
+          <Route path="/student/attendance" element={<MyAttendance />} />
         </Route>
       </Route>
 

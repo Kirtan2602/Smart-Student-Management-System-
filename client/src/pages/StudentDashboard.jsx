@@ -4,6 +4,7 @@ import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
 import EmptyState from '../components/EmptyState';
 import StatCard from '../components/StatCard';
+import AttendanceSummaryCard from '../components/AttendanceSummaryCard';
 
 export default function StudentDashboard() {
   const { data, loading, error, reload } = useFetch(fetchStudentDashboard);
@@ -81,16 +82,7 @@ export default function StudentDashboard() {
         </div>
 
         <div className="col-12 col-lg-5">
-          <div className="card h-100">
-            <div className="card-header bg-white fw-semibold">Attendance & Results</div>
-            <div className="card-body">
-              <div className="alert alert-info mb-0">
-                <i className="bi bi-info-circle me-2" />
-                Your attendance percentage and exam results will appear here once the attendance
-                (Phase 7) and marks (Phase 8) modules are built.
-              </div>
-            </div>
-          </div>
+          <AttendanceSummaryCard />
         </div>
       </div>
     </>
