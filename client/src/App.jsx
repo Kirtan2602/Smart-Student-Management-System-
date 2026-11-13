@@ -21,6 +21,12 @@ import MarkAttendance from './pages/attendance/MarkAttendance';
 import AttendanceHistory from './pages/attendance/AttendanceHistory';
 import AttendanceReport from './pages/attendance/AttendanceReport';
 import MyAttendance from './pages/student/MyAttendance';
+import ExamList from './pages/exams/ExamList';
+import MarksEntry from './pages/exams/MarksEntry';
+import SubjectResults from './pages/exams/SubjectResults';
+import SemesterResults from './pages/exams/SemesterResults';
+import GradeRules from './pages/exams/GradeRules';
+import MyResults from './pages/student/MyResults';
 
 export default function App() {
   return (
@@ -50,6 +56,12 @@ export default function App() {
           <Route path="/admin/attendance/mark" element={<MarkAttendance />} />
           <Route path="/admin/attendance/history" element={<AttendanceHistory />} />
           <Route path="/admin/attendance/report" element={<AttendanceReport />} />
+
+          <Route path="/admin/exams" element={<ExamList />} />
+          <Route path="/admin/exams/:id/marks" element={<MarksEntry />} />
+          <Route path="/admin/results/subject" element={<SubjectResults />} />
+          <Route path="/admin/results/semester" element={<SemesterResults />} />
+          <Route path="/admin/grade-rules" element={<GradeRules />} />
         </Route>
       </Route>
 
@@ -60,6 +72,10 @@ export default function App() {
           <Route path="/teacher/attendance/mark" element={<MarkAttendance />} />
           <Route path="/teacher/attendance/history" element={<AttendanceHistory />} />
           <Route path="/teacher/attendance/report" element={<AttendanceReport />} />
+
+          <Route path="/teacher/exams" element={<ExamList />} />
+          <Route path="/teacher/exams/:id/marks" element={<MarksEntry />} />
+          <Route path="/teacher/results/subject" element={<SubjectResults />} />
         </Route>
       </Route>
 
@@ -67,6 +83,7 @@ export default function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/student/attendance" element={<MyAttendance />} />
+          <Route path="/student/results" element={<MyResults />} />
         </Route>
       </Route>
 

@@ -9,6 +9,7 @@
     "dev": "nodemon server.js",
     "db:migrate": "prisma migrate dev",
     "db:seed": "node prisma/seed.js",
+    "db:seed:grades": "node prisma/seedGrades.js",
     "db:studio": "prisma studio"
   },
   "prisma": {

@@ -281,6 +281,7 @@ model Exam {
   maxMarks       Int
   passingMarks   Int
   examDate       DateTime? @db.Date
+  isPublished    Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -361,4 +362,17 @@ model RefreshToken {
 
   @@index([userId])
   @@map("refresh_tokens")
+}
+
+// ===================== 17. GRADE_RULES =====================
+
+model GradeRule {
+  id         Int      @id @default(autoincrement())
+  grade      String   @unique
+  minPercent Decimal  @unique @db.Decimal(5, 2)
+  gradePoint Decimal  @db.Decimal(4, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("grade_rules")
 }
