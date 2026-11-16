@@ -327,3 +327,14 @@ export const getSemesterResults = async (user, { semesterId, departmentId, acade
     },
   };
 };
+// ---------- Kono pan student (id thi) no result: report service mate ----------
+export const getResultsForStudent = async (studentId, academicYearId) => {
+  const year = await resolveYear(academicYearId);
+  const rules = await getGradeRules();
+  const results = await buildResults([studentId], year.id, rules);
+
+  return {
+    academicYear: { id: year.id, name: year.name },
+    semesters: results.get(studentId) || [],
+  };
+};

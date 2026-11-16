@@ -8,6 +8,9 @@ import ErrorMessage from '../../components/ErrorMessage';
 import EmptyState from '../../components/EmptyState';
 import GradeBadge from '../../components/GradeBadge';
 import ResultBadge from '../../components/ResultBadge';
+import ExportButtons from '../../components/ExportButtons';
+import { downloadFile } from '../../services/reportService';
+
 
 export default function SemesterResults() {
   const { departments, semesters, academicYears } = useLookups();
@@ -32,7 +35,19 @@ export default function SemesterResults() {
       <PageHeader
         title="Semester Results"
         subtitle="Class result of a department and semester (published exams only)"
-      />
+      >
+        {ready && data && (
+          <ExportButtons
+            onDownload={(format) =>
+              downloadFile(
+                '/reports/semester/export',
+                { format, departmentId, semesterId, academicYearId },
+                `semester-results.${format}`
+              )
+            }
+          />
+        )}
+      </PageHeader>
 
       <div className="card mb-3">
         <div className="card-body">

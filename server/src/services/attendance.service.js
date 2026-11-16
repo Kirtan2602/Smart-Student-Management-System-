@@ -337,7 +337,7 @@ export const getSubjectReport = async (user, { subjectId, from, to, threshold })
 };
 
 // ---------- Student summary (subject-wise + overall) ----------
-const buildStudentSummary = async (studentId, year, allowedSubjectIds = null) => {
+export const buildStudentSummary = async (studentId, year, allowedSubjectIds = null) => {
   const enrollments = await prisma.studentSubject.findMany({
     where: {
       studentId,

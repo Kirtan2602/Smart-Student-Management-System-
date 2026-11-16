@@ -27,6 +27,10 @@ import SubjectResults from './pages/exams/SubjectResults';
 import SemesterResults from './pages/exams/SemesterResults';
 import GradeRules from './pages/exams/GradeRules';
 import MyResults from './pages/student/MyResults';
+import ReportsOverview from './pages/reports/ReportsOverview';
+import SubjectReport from './pages/reports/SubjectReport';
+import StudentReport from './pages/reports/StudentReport';
+import MyReports from './pages/student/MyReports';
 
 export default function App() {
   return (
@@ -62,6 +66,9 @@ export default function App() {
           <Route path="/admin/results/subject" element={<SubjectResults />} />
           <Route path="/admin/results/semester" element={<SemesterResults />} />
           <Route path="/admin/grade-rules" element={<GradeRules />} />
+          <Route path="/admin/reports" element={<ReportsOverview />} />
+          <Route path="/admin/reports/subject" element={<SubjectReport />} />
+          <Route path="/admin/reports/student" element={<StudentReport />} />
         </Route>
       </Route>
 
@@ -76,6 +83,7 @@ export default function App() {
           <Route path="/teacher/exams" element={<ExamList />} />
           <Route path="/teacher/exams/:id/marks" element={<MarksEntry />} />
           <Route path="/teacher/results/subject" element={<SubjectResults />} />
+          <Route path="/teacher/reports/subject" element={<SubjectReport />} />
         </Route>
       </Route>
 
@@ -84,6 +92,7 @@ export default function App() {
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/student/attendance" element={<MyAttendance />} />
           <Route path="/student/results" element={<MyResults />} />
+          <Route path="/student/reports" element={<MyReports />} />
         </Route>
       </Route>
 
