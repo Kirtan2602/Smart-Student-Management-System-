@@ -69,3 +69,17 @@ export const setUserStatus = async (id, isActive, actingUserId) => {
   const [user] = await prisma.$transaction(operations);
   return user;
 };
+
+// Admin e user no password reset karyo: tena badha logins cancel
+export const resetPassword = async (id, newPassword) => {
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+
+  const [user] = await prisma.$transaction([
+    prisma.user.update({ where: { id }, data: { passwordHash }, select: safeUserSelect }),
+    prisma.refreshToken.updateMany({
+      where: { userId: id, revokedAt: null },
+      data: { revokedAt: new Date() },
+    }),
+  ]);
+  return user;
+};

@@ -8,6 +8,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 import EmptyState from '../../components/EmptyState';
 import StatusBadge from '../../components/StatusBadge';
 import { formatDate } from '../../utils/format';
+import ResetPasswordButton from '../../components/ResetPasswordButton';
 
 function Info({ label, value }) {
   return (
@@ -33,6 +34,7 @@ export default function StudentProfile() {
           <i className="bi bi-arrow-left me-1" />
           Back
         </Link>
+        <ResetPasswordButton userId={s.user.id} name={`${s.firstName} ${s.lastName}`} />
         <Link to={`/admin/students/${s.id}/edit`} className="btn btn-primary">
           <i className="bi bi-pencil me-1" />
           Edit

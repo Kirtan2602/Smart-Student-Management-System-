@@ -29,6 +29,9 @@ export const MENU_BY_ROLE = {
     { label: 'Reports Overview', icon: 'bi-bar-chart-line', path: '/admin/reports', end: true },
     { label: 'Subject Report', icon: 'bi-file-earmark-bar-graph', path: '/admin/reports/subject' },
     { label: 'Student Report', icon: 'bi-person-lines-fill', path: '/admin/reports/student' },
+    { label: 'Activity Logs', icon: 'bi-activity', path: '/admin/activity' },
+    { label: 'Notifications', icon: 'bi-bell', path: '/admin/notifications' },
+    { label: 'My Profile', icon: 'bi-person-circle', path: '/admin/profile' },
   ],
   TEACHER: [
     { label: 'Dashboard', icon: 'bi-speedometer2', path: '/teacher', end: true },
@@ -38,11 +41,15 @@ export const MENU_BY_ROLE = {
     { label: 'Exams & Marks', icon: 'bi-journal-text', path: '/teacher/exams' },
     { label: 'Subject Results', icon: 'bi-table', path: '/teacher/results/subject' },
     { label: 'Subject Report', icon: 'bi-file-earmark-bar-graph', path: '/teacher/reports/subject' },
+    { label: 'Notifications', icon: 'bi-bell', path: '/teacher/notifications' },
+    { label: 'My Profile', icon: 'bi-person-circle', path: '/teacher/profile' },
   ],
   STUDENT: [
     { label: 'Dashboard', icon: 'bi-speedometer2', path: '/student', end: true },
     { label: 'My Attendance', icon: 'bi-calendar-check', path: '/student/attendance' },
     { label: 'My Results', icon: 'bi-journal-text', path: '/student/results' },
     { label: 'My Reports', icon: 'bi-file-earmark-pdf', path: '/student/reports' },
+    { label: 'Notifications', icon: 'bi-bell', path: '/student/notifications' },
+    { label: 'My Profile', icon: 'bi-person-circle', path: '/student/profile' },
   ],
 };

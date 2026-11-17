@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import * as service from '../services/attendance.service.js';
 import { logActivity } from '../utils/activityLogger.js';
+import { notifyLowAttendance } from '../services/notification.service.js';
 
 const toNum = (v) => (v ? Number(v) : undefined);
 
@@ -29,6 +30,16 @@ export const save = asyncHandler(async (req, res) => {
     details: `${result.subject.code} on ${req.body.date} (lecture ${req.body.lectureNo || 1}): ${result.present} present, ${result.absent} absent`,
     ipAddress: req.ip,
   });
+
+  // Low attendance notification. Error aave to attendance save to thai j gayu chhe
+  try {
+    await notifyLowAttendance({
+      subjectId: req.body.subjectId,
+      studentIds: req.body.records.map((r) => r.studentId),
+    });
+  } catch (error) {
+    console.error('Low attendance notification failed:', error.message);
+  }
 
   res.status(result.created ? 201 : 200).json({
     success: true,

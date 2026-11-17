@@ -7,6 +7,7 @@ import {
   createUserRules,
   listUserRules,
   userStatusRules,
+  resetPasswordRules,
 } from '../validators/user.validator.js';
 
 const router = Router();
@@ -17,5 +18,6 @@ router.use(authenticate, authorize('ADMIN'));
 router.get('/', listUserRules, validate, controller.listUsers);
 router.post('/', createUserRules, validate, controller.createUser);
 router.patch('/:id/status', idParam, userStatusRules, validate, controller.updateUserStatus);
+router.patch('/:id/password', idParam, resetPasswordRules, validate, controller.resetUserPassword);
 
 export default router;

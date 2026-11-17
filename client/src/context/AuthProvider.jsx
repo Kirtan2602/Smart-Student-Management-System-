@@ -11,10 +11,8 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Refresh pan fail thay to user ne logout karo
     setAuthFailureHandler(() => setUser(null));
 
-    // Page reload par cookie thi session pacho melvo
     let active = true;
     refreshSession()
       .then((data) => {
@@ -49,8 +47,18 @@ export default function AuthProvider({ children }) {
     setUser(null);
   };
 
+  // Profile update pachhi navu naam navbar ma dekhadva
+  const refreshUser = async () => {
+    try {
+      const res = await api.get('/auth/me');
+      setUser(res.data.data);
+    } catch {
+      // na thay to juno data rahe
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

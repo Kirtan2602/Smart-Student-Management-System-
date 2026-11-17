@@ -12,6 +12,7 @@ import EmptyState from '../../components/EmptyState';
 import StatusBadge from '../../components/StatusBadge';
 import FormModal from '../../components/FormModal';
 import { getErrorMessage } from '../../utils/errors';
+import ResetPasswordButton from '../../components/ResetPasswordButton';
 
 function Info({ label, value }) {
   return (
@@ -137,6 +138,7 @@ export default function TeacherProfile() {
           <i className="bi bi-arrow-left me-1" />
           Back
         </Link>
+        <ResetPasswordButton userId={t.user.id} name={`${t.firstName} ${t.lastName}`} />
         <Link to={`/admin/teachers/${t.id}/edit`} className="btn btn-primary">
           <i className="bi bi-pencil me-1" />
           Edit

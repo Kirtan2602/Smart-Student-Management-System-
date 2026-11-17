@@ -16,6 +16,9 @@ import examRoutes from './exam.routes.js';
 import gradeRoutes from './grade.routes.js';
 import resultRoutes from './result.routes.js';
 import reportRoutes from './report.routes.js';
+import notificationRoutes from './notification.routes.js';
+import activityRoutes from './activity.routes.js';
+import profileRoutes from './profile.routes.js';
 
 const router = Router();
 
@@ -61,5 +64,8 @@ router.use('/exams', examRoutes);
 router.use('/grade-rules', gradeRoutes);
 router.use('/results', resultRoutes);
 router.use('/reports', reportRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/activity-logs', activityRoutes);
+router.use('/profile', profileRoutes);
 
 export default router;

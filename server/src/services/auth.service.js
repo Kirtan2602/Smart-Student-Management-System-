@@ -159,3 +159,45 @@ export const getProfile = async (userId) => {
 
   return user;
 };
+
+export const changePassword = async ({
+  userId,
+  currentPassword,
+  newPassword,
+  currentRawToken,
+  ipAddress,
+}) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new ApiError(404, 'User not found');
+
+  if (!(await bcrypt.compare(currentPassword, user.passwordHash))) {
+    throw new ApiError(400, 'Current password is incorrect');
+  }
+  if (await bcrypt.compare(newPassword, user.passwordHash)) {
+    throw new ApiError(400, 'New password must be different from the current password');
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  const keepHash = currentRawToken ? hashToken(currentRawToken) : null;
+
+  // Password badlo + bija badha devices ni sessions cancel (aa device ni session rahe)
+  await prisma.$transaction([
+    prisma.user.update({ where: { id: userId }, data: { passwordHash } }),
+    prisma.refreshToken.updateMany({
+      where: {
+        userId,
+        revokedAt: null,
+        ...(keepHash && { tokenHash: { not: keepHash } }),
+      },
+      data: { revokedAt: new Date() },
+    }),
+  ]);
+
+  await logActivity({
+    userId,
+    action: 'CHANGE_PASSWORD',
+    entity: 'User',
+    entityId: userId,
+    ipAddress,
+  });
+};

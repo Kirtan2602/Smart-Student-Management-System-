@@ -19,3 +19,16 @@ export const getDisplayName = (user) => {
 
 // Aaj ni tarikh "YYYY-MM-DD" (date input mate, local timezone ma)
 export const todayInput = () => new Date().toLocaleDateString('en-CA');
+
+// "5 min ago", "2 hr ago", "3 days ago"
+export const timeAgo = (value) => {
+  const seconds = Math.floor((Date.now() - new Date(value).getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hr ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+  return formatDate(value);
+};

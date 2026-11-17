@@ -58,3 +58,18 @@ export const updateUserStatus = asyncHandler(async (req, res) => {
     data,
   });
 });
+
+export const resetUserPassword = asyncHandler(async (req, res) => {
+  const data = await userService.resetPassword(req.params.id, req.body.newPassword);
+
+  await logActivity({
+    userId: req.user.id,
+    action: 'RESET_PASSWORD',
+    entity: 'User',
+    entityId: data.id,
+    details: `Reset password of ${data.email}`,
+    ipAddress: req.ip,
+  });
+
+  res.json({ success: true, message: 'Password reset successfully' });
+});

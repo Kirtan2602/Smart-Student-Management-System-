@@ -6,6 +6,7 @@ import EmptyState from '../components/EmptyState';
 import StatCard from '../components/StatCard';
 import DepartmentChart from '../components/charts/DepartmentChart';
 import { formatDateTime } from '../utils/format';
+import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const { data, loading, error, reload } = useFetch(fetchAdminDashboard);
@@ -73,7 +74,12 @@ export default function AdminDashboard() {
 
         <div className="col-12 col-xl-6">
           <div className="card h-100">
-            <div className="card-header bg-white fw-semibold">Recent Activity</div>
+            <div className="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+              Recent Activity
+              <Link to="/admin/activity" className="small fw-normal">
+                View all
+              </Link>
+            </div>
             <div className="card-body p-0">
               {recentActivity.length === 0 ? (
                 <EmptyState icon="bi-clock-history" message="No activity yet" />

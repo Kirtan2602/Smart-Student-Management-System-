@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import * as service from '../services/exam.service.js';
 import { logActivity } from '../utils/activityLogger.js';
+import { notifyResultPublished } from '../services/notification.service.js';
 
 const toNum = (v) => (v ? Number(v) : undefined);
 
@@ -59,6 +60,15 @@ export const publish = asyncHandler(async (req, res) => {
     data,
     `${isPublished ? 'Published' : 'Unpublished'} results of "${data.name}"`
   );
+
+  if (isPublished) {
+    try {
+      await notifyResultPublished(data);
+    } catch (error) {
+      console.error('Result notification failed:', error.message);
+    }
+  }
+
   res.json({
     success: true,
     message: isPublished ? 'Results published successfully' : 'Results unpublished successfully',

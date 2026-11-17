@@ -31,6 +31,9 @@ import ReportsOverview from './pages/reports/ReportsOverview';
 import SubjectReport from './pages/reports/SubjectReport';
 import StudentReport from './pages/reports/StudentReport';
 import MyReports from './pages/student/MyReports';
+import ActivityLogs from './pages/admin/ActivityLogs';
+import Notifications from './pages/common/Notifications';
+import Profile from './pages/common/Profile';
 
 export default function App() {
   return (
@@ -69,6 +72,9 @@ export default function App() {
           <Route path="/admin/reports" element={<ReportsOverview />} />
           <Route path="/admin/reports/subject" element={<SubjectReport />} />
           <Route path="/admin/reports/student" element={<StudentReport />} />
+          <Route path="/admin/activity" element={<ActivityLogs />} />
+          <Route path="/admin/notifications" element={<Notifications />} />
+          <Route path="/admin/profile" element={<Profile />} />
         </Route>
       </Route>
 
@@ -84,6 +90,8 @@ export default function App() {
           <Route path="/teacher/exams/:id/marks" element={<MarksEntry />} />
           <Route path="/teacher/results/subject" element={<SubjectResults />} />
           <Route path="/teacher/reports/subject" element={<SubjectReport />} />
+          <Route path="/teacher/notifications" element={<Notifications />} />
+          <Route path="/teacher/profile" element={<Profile />} />
         </Route>
       </Route>
 
@@ -93,6 +101,8 @@ export default function App() {
           <Route path="/student/attendance" element={<MyAttendance />} />
           <Route path="/student/results" element={<MyResults />} />
           <Route path="/student/reports" element={<MyReports />} />
+          <Route path="/student/notifications" element={<Notifications />} />
+          <Route path="/student/profile" element={<Profile />} />
         </Route>
       </Route>
 

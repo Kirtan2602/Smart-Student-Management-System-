@@ -56,3 +56,17 @@ export const me = asyncHandler(async (req, res) => {
   const data = await authService.getProfile(req.user.id);
   res.json({ success: true, data });
 });
+
+export const changePassword = asyncHandler(async (req, res) => {
+  await authService.changePassword({
+    userId: req.user.id,
+    currentPassword: req.body.currentPassword,
+    newPassword: req.body.newPassword,
+    currentRawToken: req.cookies?.[COOKIE_NAME],
+    ipAddress: req.ip,
+  });
+  res.json({
+    success: true,
+    message: 'Password changed successfully. Your other devices have been logged out.',
+  });
+});

@@ -10,3 +10,13 @@ export const loginRules = [
     .isString().withMessage('Password is required')
     .notEmpty().withMessage('Password is required'),
 ];
+
+export const changePasswordRules = [
+  body('currentPassword')
+    .isString().withMessage('Current password is required')
+    .notEmpty().withMessage('Current password is required'),
+  body('newPassword')
+    .isString().withMessage('New password is required')
+    .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0 })
+    .withMessage('New password must be at least 8 characters with uppercase, lowercase and a number'),
+];
